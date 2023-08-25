@@ -35,7 +35,6 @@ export default {
                             const ctx = chartCanvas.value.getContext('2d');
                             chartInstance = new Chart(ctx, {
                                 type: 'line',
-                                labels: formattedDates,
                                 data: {
                                     labels: dates,
                                     datasets: [
