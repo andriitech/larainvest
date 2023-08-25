@@ -1,0 +1,41 @@
+@startuml
+
+actor User
+
+participant AssetSearchSelect
+participant PriceChart
+participant MarkedDataService
+participant MarkedDataAdapter
+participant AlphaGateway
+
+User -> AssetSearchSelect: Type in stock name
+activate AssetSearchSelect
+
+AssetSearchSelect -> AssetSearchSelect: Find symbol
+AssetSearchSelect -> PriceChart: Send symbol
+deactivate AssetSearchSelect
+
+activate PriceChart
+PriceChart -> MarkedDataService: Request historical data for symbol
+activate MarkedDataService
+
+MarkedDataService -> MarkedDataAdapter: Check cache for data
+activate MarkedDataAdapter
+
+MarkedDataAdapter -> MarkedDataService: Return cached data if available
+MarkedDataAdapter -> AlphaGateway: Request data for symbol if not cached
+activate AlphaGateway
+
+AlphaGateway --> MarkedDataAdapter: Return data
+deactivate AlphaGateway
+
+MarkedDataAdapter -> MarkedDataAdapter: Cached data
+MarkedDataAdapter --> MarkedDataService: Return data
+deactivate MarkedDataAdapter
+
+MarkedDataService --> PriceChart: Return data
+deactivate MarkedDataService
+deactivate PriceChart
+PriceChart -> User: Display historical data
+
+@enduml
